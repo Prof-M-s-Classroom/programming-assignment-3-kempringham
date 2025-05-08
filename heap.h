@@ -22,74 +22,45 @@ public:
     }
 
     void insert(int vertex, int key) {
-        // Check that capacity has not been reached
         if (size >= capacity) {
-            return;
+            return; // Fix for edge case
         }
 
-        int index = size;
-        heapArray[index] = vertex;
-        keyArray[vertex] = key;
-        position[vertex] = index;
-        size++;
-
-        while (index != 0 && keyArray[heapArray[index]] < keyArray[heapArray[(index - 1) / 2]]) {
-            int parentIndex = (index - 1) / 2;
-
-            position[heapArray[index]] = parentIndex;
-            position[heapArray[parentIndex]] = index;
-
-            std::swap(heapArray[index], heapArray[parentIndex]);
-            std::swap(keyArray[heapArray[index]], keyArray[heapArray[parentIndex]]);
-
-            index = parentIndex;
+        if (!isInMinHeap(vertex)) {
+            int index = size;
+            heapArray[size] = vertex;
+            keyArray[size] = key;
+            position[size] = index;
+            minHeapify(index);
+            size++;
         }
+
     }
 
 
     int extractMin() {
-        // Check edge case
         if (size == 0) {
-            return -1;
+            return 0;
         }
-
-        // Minimum value is stored at top
         int min = heapArray[0];
-
-        // If there is only one element
-        if (size == 1) {
-            size--;
-            return min;
-        }
-
-        heapArray[0] = heapArray[size - 1];
-        keyArray[0] = keyArray[size - 1];
-        position[heapArray[0]] = 0;
+        position[] = 0;
+        decreaseKey(index, keyArray[index]); // if adj matrix is not inf, it is a neighbor
         size--;
-        minHeapify(0); // Min index is always 0
-
         return min;
-
     }
 
     void decreaseKey(int vertex, int newKey) {
-        if (size == 0) {
-            return;
-        }
-        int index = position[vertex];
-        // Update key
-        keyArray[index] = newKey;
-
-        while (index > 0 && keyArray[index] < keyArray[(index - 1) / 2]) {
-            int parentIndex = (index - 1) / 2;
-            swap(heapArray[index], heapArray[parentIndex]);
-            swap(position[heapArray[index]], position[heapArray[parentIndex]]);
-            index = parentIndex;
-        }
+        keyArray[position[vertex]] = newKey;
+        minHeapify(position[vertex]);
     }
 
     bool isInMinHeap(int vertex) {
-        return (position[vertex] >= 0 && position[vertex] < size);
+        for (int i = 0; i < size; i++) {
+            if (heapArray[i] == vertex) {
+                return true;
+            }
+        }
+        return false;
     }
 
     bool isEmpty() {
@@ -104,26 +75,24 @@ private:
     int size;
 
     void minHeapify(int idx) {
-        int smallest = idx;
-        int left = 2 * idx + 1;
-        int right = 2 * idx + 2;
-
-        if (left < size && keyArray[left] < keyArray[smallest]) {
-            smallest = left;
+        if (size == 0) {
+            return;
         }
-
-        if (right < size && keyArray[right] < keyArray[smallest]) {
-            smallest = right;
+        for (int i = idx - 1; i >= 0; i++) {
+            if (keyArray[idx] < keyArray[i]) {
+                int tempkey = keyArray[i];
+                int temp_position = position[i];
+                int tempvertex = heapArray[i];
+                heapArray[i] = heapArray[idx];
+                keyArray[i] = keyArray[idx];
+                position[i] = position[idx];
+                heapArray[idx] = tempvertex;
+                keyArray[tempvertex] = tempkey;
+                position[tempvertex] = temp_position;
+            }
         }
-
-        if (smallest != idx) {
-            swap(heapArray[smallest], heapArray[idx]);
-            swap(position[heapArray[smallest]], position[heapArray[idx]]);
-            minHeapify(smallest);
-        }
-
-
     }
+
 };
 
 #endif
