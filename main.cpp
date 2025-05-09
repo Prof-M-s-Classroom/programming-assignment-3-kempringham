@@ -9,8 +9,9 @@ int main() {
     heap.insert(1, 2);
     heap.insert(5, 9);
     heap.insert(3, 4);
+    heap.print();
     heap.extractMin();
-    heap.extractMin();
+    //heap.extractMin();
     //heap.extractMin();
     heap.print();
 

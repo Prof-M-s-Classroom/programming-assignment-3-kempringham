@@ -53,8 +53,10 @@ public:
 
         }
         heapArray[size] = INT_MAX;
+        size--;
         return min;
     }
+
 
     void decreaseKey(int vertex, int newKey) {
         keyArray[position[vertex]] = newKey;
@@ -108,8 +110,6 @@ private:
                 }
             }
         }
-
-        return;
     }
 };
 
