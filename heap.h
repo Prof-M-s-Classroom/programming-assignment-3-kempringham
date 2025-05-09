@@ -1,17 +1,17 @@
 #ifndef HEAP_H
 #define HEAP_H
-#include <algorithm>
-#include <__algorithm/ranges_min.h>
-#include <__filesystem/path.h>
-using namespace std; // Use swap in C++
 
 class MinHeap {
 public:
     MinHeap(int capacity) {
         this->capacity = capacity;
         size = 0;
+
         heapArray = new int[capacity];
         keyArray = new int[capacity];
+        for (int i = 0; i < capacity; i++) {
+            keyArray[i] = INT_MAX;
+        }
         position = new int[capacity];
     }
 
@@ -20,46 +20,70 @@ public:
         delete[] keyArray;
         delete[] position;
     }
-
     void insert(int vertex, int key) {
-        if (size >= capacity) {
-            return; // Fix for edge case
-        }
+        //if (size >= capacity) {
+        //    return;
+        //}
 
         if (!isInMinHeap(vertex)) {
-            int index = size;
             heapArray[size] = vertex;
             keyArray[size] = key;
-            position[size] = index;
-            minHeapify(index);
+            position[size] = size;
+            minHeapify(size);
             size++;
         }
-
     }
-
 
     int extractMin() {
         if (size == 0) {
-            return 0;
+            std::cout << "Empty MinHeap" << std::endl;
+            return -1;
         }
+
         int min = heapArray[0];
-        position[] = 0;
-        decreaseKey(index, keyArray[index]); // if adj matrix is not inf, it is a neighbor
-        size--;
+
+        for (int i = 0; i < size; i++) {
+            heapArray[i] = heapArray[i+1];
+        }
+
+        for (int i = 1; i < size; i++) {
+            if (position[i] != 0) {
+                position[i] -= 1;
+            }
+
+        }
+        heapArray[size] = INT_MAX;
         return min;
     }
 
     void decreaseKey(int vertex, int newKey) {
         keyArray[position[vertex]] = newKey;
-        minHeapify(position[vertex]);
+
+    }
+
+    void print() {
+        for (int i = 0; i < capacity; i++) {
+            std::cout << heapArray[i] << " ";
+        }
+
+        std::cout << std::endl;
+        for (int j = 0; j < capacity; j++) {
+            std::cout << keyArray[j] << " ";
+        }
+        std::cout << std::endl;
+
+        for (int i = 0; i < capacity; i++) {
+            std::cout << position[i] << " ";
+        }
     }
 
     bool isInMinHeap(int vertex) {
-        for (int i = 0; i < size; i++) {
+        for(int i = 0; i < size; i++) {
             if (heapArray[i] == vertex) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -75,24 +99,18 @@ private:
     int size;
 
     void minHeapify(int idx) {
-        if (size == 0) {
-            return;
-        }
-        for (int i = idx - 1; i >= 0; i++) {
-            if (keyArray[idx] < keyArray[i]) {
-                int tempkey = keyArray[i];
-                int temp_position = position[i];
-                int tempvertex = heapArray[i];
-                heapArray[i] = heapArray[idx];
-                keyArray[i] = keyArray[idx];
-                position[i] = position[idx];
-                heapArray[idx] = tempvertex;
-                keyArray[tempvertex] = tempkey;
-                position[tempvertex] = temp_position;
+        if (idx > 0 && idx <= size && size > 0) {
+            for (int i = idx - 1; i >= 0; i--) {
+                if (heapArray[idx] < heapArray[i]) {
+                    swap(heapArray[idx], heapArray[i]);
+                    swap(keyArray[idx], keyArray[i]);
+                    idx--;
+                }
             }
         }
-    }
 
+        return;
+    }
 };
 
 #endif
