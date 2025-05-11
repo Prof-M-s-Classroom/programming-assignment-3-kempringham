@@ -29,7 +29,25 @@ public:
 
     void primMST() {
         // Must print MST edges and total weight
-        MinHeap(5);
+        // Initialize min heap
+        MinHeap(4);
+        // Start keys as 0, inf, inf, ....
+        // Starts vertices as 0,1,2,3
+        // Starts position as 0,1,2,3
+
+
+        if (size > 2) {
+            for (int i = 0; i < numVertices; i++) {
+                for (int j = 0; j < numVertices; j++) {
+                    if (adjMatrix[i][j] < 0) { // change to less than current key value
+                        // decrease key
+                    }
+                }
+            }
+        }
+
+
+
     }
 
 private:
