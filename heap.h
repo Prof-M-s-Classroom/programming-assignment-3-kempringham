@@ -9,10 +9,12 @@ public:
 
         heapArray = new int[capacity];
         keyArray = new int[capacity];
-        for (int i = 0; i < capacity; i++) {
-            keyArray[i] = INT_MAX;
-        }
         position = new int[capacity];
+        for (int i = 0; i < capacity; i++) {
+            heapArray[i] = INT_MAX;
+            keyArray[i] = INT_MAX;
+            position[i] = -1;
+        }
     }
 
     ~MinHeap() {
@@ -21,17 +23,20 @@ public:
         delete[] position;
     }
     void insert(int vertex, int key) {
-        //if (size >= capacity) {
-        //    return;
-        //}
+        if (size == capacity) {
+            return;
+        }
 
         if (!isInMinHeap(vertex)) {
             heapArray[size] = vertex;
             keyArray[size] = key;
             position[size] = size;
             minHeapify(size);
+            // Size is one less than it should be for some reaosn
             size++;
         }
+        // If vertex already exists, decrease the key
+        //decreaseKey(vertex, key);
     }
 
     int extractMin() {
@@ -41,26 +46,26 @@ public:
         }
 
         int min = heapArray[0];
+        position[0] = 0;
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i <= size; i++) {
             heapArray[i] = heapArray[i+1];
         }
 
-        for (int i = 1; i < size; i++) {
+        // Fix for loop(size is one less than it should be)
+        for (int i = 0; i <= size + 1; i++) {
             if (position[i] != 0) {
                 position[i] -= 1;
             }
 
         }
-        heapArray[size] = INT_MAX;
+        heapArray[size] = heapArray[size-1];
         size--;
         return min;
     }
 
-
     void decreaseKey(int vertex, int newKey) {
         keyArray[position[vertex]] = newKey;
-
     }
 
     void print() {

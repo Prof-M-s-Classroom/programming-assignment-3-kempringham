@@ -7,12 +7,11 @@ int main() {
     MinHeap heap(4);
     heap.insert(0, 0);
     heap.insert(1, 2);
-    heap.insert(5, 9);
-    heap.insert(3, 4);
-    heap.print();
+    heap.insert(2, 4);
+    heap.insert(3,20);
     heap.extractMin();
-    //heap.extractMin();
-    //heap.extractMin();
+    heap.extractMin();
+    heap.extractMin();
     heap.print();
 
     //int test = heap.extractMin();
