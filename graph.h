@@ -48,9 +48,19 @@ public:
         // Vertex 0 has key value of 0
         heap.decreaseKey(0, 0);
 
+
+        int min[numVertices];
+        int parent[numVertices];
+        int child[numVertices];
+        int weight[numVertices];
+
+
         // Initialize key values for first row
         for (int i = 1; i < numVertices; i++) {
             heap.decreaseKey(i, adjMatrix[0][i]);
+            parent[i] = 0;
+            child[i] = i;
+            weight[i] = adjMatrix[0][i];
         }
 
 
@@ -59,10 +69,23 @@ public:
             heap.extractMin();
             for (int j = i+1; j < numVertices; j++) {
                 if (adjMatrix[i][j] < adjMatrix[i - 1][j]) {
-                     heap.decreaseKey(j, adjMatrix[i][j]);
+                    heap.decreaseKey(j, adjMatrix[i][j]);
+                    parent[j] = i;
+                    child[j] = j;
+                    weight[j] = adjMatrix[i][j];
                 }
             }
         }
+
+        int total_cost = 0;
+        // Don't include first
+        for (int i = 1; i < numVertices; i++) {
+            cout << parent[i] << " -- " << child[i] << " (" << weight[i] << ")" <<endl;
+            total_cost += weight[i];
+        }
+
+        cout << "Total Cost: " << total_cost << endl;
+
 
         heap.print();
 
