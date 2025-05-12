@@ -86,9 +86,6 @@ public:
 
         cout << "Total Cost: " << total_cost << endl;
 
-
-        heap.print();
-
         // delete adjacency matrix?
 
 
