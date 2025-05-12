@@ -24,7 +24,8 @@ public:
 
     void addEdge(int u, int v, int weight) {
         adjMatrix[u][v] = weight;
-        adjMatrix[v][u] = weight;
+        // directed or undirected?
+        //adjMatrix[v][u] = weight;
     }
 
     void primMST() {
@@ -40,18 +41,20 @@ public:
         heap.insert(0,0);
 
         // Initialize the rest of the values of the heap
-        for (int i = 1; i < numVertices; i++) {
+        for (int i = 0; i < numVertices; i++) {
             heap.insert(i, INT_MAX);
         }
 
-        for (int i = 0; i < numVertices; i++) {
+        // Updates arrays (extract min and decrease key)
+        for (int i = 1; i < numVertices + 1; i++) {
             heap.extractMin();
             for (int j = i+1; j < numVertices; j++) {
-                if (adjMatrix[i][j] < adjMatrix[i - 1][j]) {
-                    heap.decreaseKey(j, adjMatrix[i][j]);
+                if (adjMatrix[i][j] < adjMatrix[i - 1][j] && adjMatrix[i][j] != inf) {
+                     heap.decreaseKey(j, adjMatrix[i][j]);
                 }
             }
         }
+
 
         heap.print();
 

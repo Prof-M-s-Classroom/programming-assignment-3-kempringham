@@ -67,6 +67,7 @@ public:
         keyArray[vertex] = newKey;
     }
 
+    // Added to help check arrays
     void print() {
         for (int i = 0; i < capacity; i++) {
             std::cout << heapArray[i] << " ";
