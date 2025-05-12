@@ -18,6 +18,7 @@ public:
     }
 
     ~MinHeap() {
+        // use these*
         delete[] heapArray;
         delete[] keyArray;
         delete[] position;

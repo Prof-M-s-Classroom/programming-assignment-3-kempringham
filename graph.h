@@ -45,13 +45,16 @@ public:
             heap.insert(i, INT_MAX);
         }
 
+        // Vertex 0 has key value of 0
+        heap.decreaseKey(0, 0);
+
         // Initialize key values for first row
-        for (int i = 0; i < numVertices; i++) {
+        for (int i = 1; i < numVertices; i++) {
             heap.decreaseKey(i, adjMatrix[0][i]);
         }
 
 
-        // Updates arrays (extract min and decrease key)
+        // Updates arrays (extract min and decrease key
         for (int i = 1; i < numVertices + 1; i++) {
             heap.extractMin();
             for (int j = i+1; j < numVertices; j++) {
@@ -61,10 +64,9 @@ public:
             }
         }
 
-        heap.decreaseKey(0,0);
-
-
         heap.print();
+
+        // delete adjacency matrix?
 
 
 
