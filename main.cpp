@@ -4,19 +4,14 @@
 
 int main() {
 
-    MinHeap heap(4);
-    heap.insert(0, 0);
-    heap.insert(1, 2);
-    heap.insert(2, 4);
-    heap.insert(3,20);
-    //heap.extractMin();
-    //heap.extractMin();
-    //heap.extractMin();
-    heap.print();
+    Graph g(4);              // Initialize graph with 4 vertices
+    g.addEdge(0, 1, 2);      // Add edge 0 - 1 with weight 2
+    g.addEdge(0, 2, 4);      // Add edge 0 - 2 with weight 4
+    g.addEdge(1, 2, 1);      // Add edge 1 - 2 with weight 1
+    g.addEdge(1, 3, 7);      // Add edge 1 - 3 with weight 7
+    g.addEdge(2, 3, 3);      // Add edge 2 - 3 with weight 3
+    g.primMST();             // Call Prim's algorithm
 
-    //int test = heap.extractMin();
-    //std::cout << test << std::endl;
-    //heap.print();
 
 
     /*

@@ -46,14 +46,13 @@ public:
         }
 
         int min = heapArray[0];
-        position[0] = 0;
 
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0; i < capacity; i++) {
             heapArray[i] = heapArray[i+1];
         }
 
         // Fix for loop(size is one less than it should be)
-        for (int i = 0; i <= size + 1; i++) {
+        for (int i = 0; i < capacity + 1; i++) {
             if (position[i] != 0) {
                 position[i] -= 1;
             }
@@ -65,15 +64,15 @@ public:
     }
 
     void decreaseKey(int vertex, int newKey) {
-        keyArray[position[vertex]] = newKey;
+        keyArray[vertex] = newKey;
     }
 
     void print() {
         for (int i = 0; i < capacity; i++) {
             std::cout << heapArray[i] << " ";
         }
-
         std::cout << std::endl;
+
         for (int j = 0; j < capacity; j++) {
             std::cout << keyArray[j] << " ";
         }
@@ -97,6 +96,7 @@ public:
     bool isEmpty() {
         return size == 0;
     }
+
 
 private:
     int* heapArray;        // Heap of vertex indices

@@ -30,25 +30,35 @@ public:
     void primMST() {
         // Must print MST edges and total weight
         // Initialize min heap
-        MinHeap(4);
+        MinHeap heap(numVertices);
+
         // Start keys as 0, inf, inf, ....
-        // Starts vertices as 0,1,2,3
-        // Starts position as 0,1,2,3
+        // Starts vertices as 0,1,2,3,...
+        // Starts position as 0,1,2,3,...
 
+        // Insert vertex 0 into heap
+        heap.insert(0,0);
 
-        if (size > 2) {
-            for (int i = 0; i < numVertices; i++) {
-                for (int j = 0; j < numVertices; j++) {
-                    if (adjMatrix[i][j] < 0) { // change to less than current key value
-                        // decrease key
-                    }
+        // Initialize the rest of the values of the heap
+        for (int i = 1; i < numVertices; i++) {
+            heap.insert(i, INT_MAX);
+        }
+
+        for (int i = 0; i < numVertices; i++) {
+            heap.extractMin();
+            for (int j = i+1; j < numVertices; j++) {
+                if (adjMatrix[i][j] < adjMatrix[i - 1][j]) {
+                    heap.decreaseKey(j, adjMatrix[i][j]);
                 }
             }
         }
 
+        heap.print();
+
 
 
     }
+
 
 private:
     int** adjMatrix;
