@@ -45,11 +45,16 @@ public:
             heap.insert(i, INT_MAX);
         }
 
+        for (int i = 0; i < numVertices; i++) {
+            heap.decreaseKey(i, adjMatrix[0][i]);
+        }
+
+
         // Updates arrays (extract min and decrease key)
         for (int i = 1; i < numVertices + 1; i++) {
-            heap.extractMin();
+            int vertex = heap.extractMin();
             for (int j = i+1; j < numVertices; j++) {
-                if (adjMatrix[i][j] < adjMatrix[i - 1][j] && adjMatrix[i][j] != inf) {
+                if (adjMatrix[i][j] < adjMatrix[i - 1][j]) {
                      heap.decreaseKey(j, adjMatrix[i][j]);
                 }
             }
