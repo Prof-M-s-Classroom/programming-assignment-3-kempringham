@@ -1,5 +1,6 @@
 #ifndef HEAP_H
 #define HEAP_H
+using namespace std;
 
 class MinHeap {
 public:
@@ -24,15 +25,25 @@ public:
         delete[] position;
     }
     void insert(int vertex, int key) {
-        if (size == capacity) {
+        if (size == capacity || isInMinHeap(vertex)) {
             return;
         }
 
         if (!isInMinHeap(vertex)) {
             heapArray[size] = vertex;
             keyArray[size] = key;
-            position[size] = size;
-            minHeapify(size);
+            position[vertex] = size;
+            int parent = (size - 1) / 2;
+            while (size > 0 && keyArray[size] < keyArray[parent]) {
+                swap(heapArray[size], heapArray[parent]);
+                swap(keyArray[size], keyArray[parent]);
+
+                position[heapArray[size]] = size;
+                position[heapArray[parent]] = parent;
+
+                size = parent;
+                parent = (size - 1) / 2;
+            }
             // Size is one less than it should be for some reaosn
             size++;
         }
@@ -42,57 +53,54 @@ public:
 
     int extractMin() {
         if (size == 0) {
-            std::cout << "Empty MinHeap" << std::endl;
+            cout << "Empty MinHeap" << endl;
             return -1;
         }
 
         int min = heapArray[0];
 
-        for (int i = 0; i < capacity; i++) {
-            heapArray[i] = heapArray[i+1];
+        heapArray[0] = heapArray[size - 1];
+        keyArray[0] = keyArray[size - 1];
+
+        if (size > 1) {
+            position[heapArray[0]] = 0;
+        }
+        position[min] = -1;
+        size--;;
+
+        if (size > 0) {
+            minHeapify(0);
         }
 
-        // Fix for loop(size is one less than it should be)
-        for (int i = 0; i < capacity + 1; i++) {
-            if (position[i] != 0) {
-                position[i] -= 1;
-            }
-
-        }
-        heapArray[size] = heapArray[size-1];
-        size--;
         return min;
     }
 
     void decreaseKey(int vertex, int newKey) {
-        keyArray[vertex] = newKey;
-    }
+        int index = position[vertex];
 
-    // Added to help check arrays
-    void print() {
-        for (int i = 0; i < capacity; i++) {
-            std::cout << heapArray[i] << " ";
+        if (index == -1 || newKey < keyArray[index]) {
+            return;
         }
-        std::cout << std::endl;
 
-        for (int j = 0; j < capacity; j++) {
-            std::cout << keyArray[j] << " ";
-        }
-        std::cout << std::endl;
+        keyArray[index] = newKey;
 
-        for (int i = 0; i < capacity; i++) {
-            std::cout << position[i] << " ";
+        int parent = (index - 1) / 2;
+        while (index > 0 && keyArray[index] < keyArray[parent]) {
+            swap(heapArray[index], heapArray[parent]);
+            swap(keyArray[index], keyArray[parent]);
+
+            position[heapArray[index]] = index;
+            position[heapArray[parent]] = parent;
+
+            index = parent;
+            parent = (index - 1) / 2;
         }
+
+
     }
 
     bool isInMinHeap(int vertex) {
-        for(int i = 0; i < size; i++) {
-            if (heapArray[i] == vertex) {
-                return true;
-            }
-        }
-
-        return false;
+        return position[vertex] != -1 && position[vertex] < size;
     }
 
     bool isEmpty() {
@@ -108,15 +116,29 @@ private:
     int size;
 
     void minHeapify(int idx) {
-        if (idx > 0 && idx <= size && size > 0) {
-            for (int i = idx - 1; i >= 0; i--) {
-                if (heapArray[idx] < heapArray[i]) {
-                    swap(heapArray[idx], heapArray[i]);
-                    swap(keyArray[idx], keyArray[i]);
-                    idx--;
-                }
-            }
+        int min = idx;
+        int left = (2 * idx) + 1;
+        int right = (2 * idx) + 2;
+
+        if (left < size && keyArray[left] < keyArray[min]) {
+            min = left;
         }
+
+        if (right < size && keyArray[right] < keyArray[min]) {
+            min = right;
+        }
+
+        if (min != idx) {
+            swap(heapArray[idx], heapArray[min]);
+            swap(keyArray[idx], keyArray[min]);
+
+            position[heapArray[idx]] = idx;
+            position[heapArray[min]] = min;
+
+            minHeapify(min);
+        }
+
+
     }
 };
 
