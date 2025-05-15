@@ -34,16 +34,22 @@ public:
         adjMatrix[v][u] = weight;
     }
     void primMST() {
+        // Stores the starting vertices
         int* parent = new int[numVertices];
-        int* key = new int[numVertices];     // Used for min edge weight
+
+        // Stores the current lowest weights
+        int* key = new int[numVertices];
 
         MinHeap heap(numVertices);
 
         for (int i = 0; i < numVertices; i++) {
+            // All the keys should originally be infinity, so they can be decreased when edges are chosen
             key[i] = INT_MAX;
+            // We don't know the parents yet so set to -1
             parent[i] = -1;
         }
 
+        // Our arbitrary starting vertex is 0
         key[0] = 0;
 
         // Insert all vertices into the min heap
@@ -74,6 +80,7 @@ public:
 
         cout << "Total Cost: " << totalWeight << endl;
 
+        // Memory management
         delete[] parent;
         delete[] key;
     }

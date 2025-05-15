@@ -85,26 +85,27 @@ public:
     }
 
     void decreaseKey(int vertex, int newKey) {
+        // If the vertex is not in the heap, you can't decrease the key
+        // If the current key is less than the new key, don't change it
         if (position[vertex] == -1 || keyArray[position[vertex]] <= newKey) {
             return;
         }
 
-        // Update the key
+        // Update the key to the new(lower) key value
         keyArray[position[vertex]] = newKey;
 
-        // New key would result in "smaller" value, will need to upheap into correct spot
+        // Upheap to restore min heap propety
         int curr = position[vertex];
         int parent = (curr - 1) / 2;
         while (curr > 0 && keyArray[curr] < keyArray[parent]) {
-            // Swap the nodes
+            // Swap the vertices
             std::swap(heapArray[curr], heapArray[parent]);
             std::swap(keyArray[curr], keyArray[parent]);
 
-            // Update position array
+            // Update position in min heap
             position[heapArray[curr]] = curr;
             position[heapArray[parent]] = parent;
 
-            // Move up
             curr = parent;
             parent = (curr - 1) / 2;
         }
