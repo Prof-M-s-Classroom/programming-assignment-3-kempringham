@@ -80,14 +80,14 @@ Output:
 Total Cost: 15
 
 Test 3:
-Graph g(3);
+
+
+0 -- 1 (5)
+1 -- 2 (1)Graph g(3);
 g.addEdge(0, 1, 10);
 g.addEdge(0, 1, 5);
 g.addEdge(1, 2, 1);
 g.primMST();
-
-0 -- 1 (5)
-1 -- 2 (1)
 Total Cost: 6
 
 Test 4:

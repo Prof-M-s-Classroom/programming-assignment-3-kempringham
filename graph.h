@@ -1,6 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 using namespace std; // added for print(cout)
+#include "heap.h"
 
 class Graph {
 public:
@@ -32,57 +33,51 @@ public:
         adjMatrix[u][v] = weight;
         adjMatrix[v][u] = weight;
     }
-void primMST() {
-        // Keeps track of which vertices were visited
-        bool visited[numVertices];
-        // Stores key values
-        int key[numVertices];
-        // Stores index of the parent value (needed to print starting vertex)
-        int parent[numVertices];
-        // All keys start off as infinity and none of the vertices are in the MST
+    void primMST() {
+        int* parent = new int[numVertices];
+        int* key = new int[numVertices];     // Used for min edge weight
+
+        MinHeap heap(numVertices);
+
         for (int i = 0; i < numVertices; i++) {
             key[i] = INT_MAX;
-            visited[i] = false;
+            parent[i] = -1;
         }
 
-        // Set starting index as 0
         key[0] = 0;
-        parent[0] = -1;
 
-        int total_cost = 0;
+        // Insert all vertices into the min heap
+        for (int v = 0; v < numVertices; v++) {
+            heap.insert(v, key[v]);
+        }
 
-        for (int count = 0; count < numVertices; count++) {
-            // Pick the minimum key vertex from the set of vertices not yet included in MST
-            int u = -1;
-            int min = INT_MAX;
-            for (int v = 0; v < numVertices; v++) {
-                if (!visited[v] && key[v] < min) {
-                    min = key[v];
-                    u = v;
-                }
-            }
+        int totalWeight = 0;
 
-            // Add the vertex to the array that stores visited vertices
-            visited[u] = true;
+        while (!heap.isEmpty()) {
+            int u = heap.extractMin();
 
-            // Print the edge that was added to MST so that it prints in order
+            // Print edge when it's added to MST (except the starting node)
             if (parent[u] != -1) {
-                cout << parent[u] << " -- " << u << " (" << adjMatrix[parent[u]][u] << ")" << endl;
-                total_cost += adjMatrix[parent[u]][u];
+                cout << parent[u] << " -- " << u << " (" << adjMatrix[u][parent[u]] << ")" << endl;
+                totalWeight += adjMatrix[u][parent[u]];
             }
 
             for (int v = 0; v < numVertices; v++) {
-                // Decrease edge weight if neighbor is unvisited and its key value is less than the current key value
-                if (adjMatrix[u][v] != 0 && !visited[v] && adjMatrix[u][v] < key[v]) {
+                int weight = adjMatrix[u][v];
+                if (weight != INT_MAX && heap.isInMinHeap(v) && weight < key[v]) {
+                    key[v] = weight;
                     parent[v] = u;
-                    key[v] = adjMatrix[u][v];
+                    heap.decreaseKey(v, weight);
                 }
             }
         }
 
-        // Print the total cost
-        cout << "Total Cost: " << total_cost << endl;
+        cout << "Total Cost: " << totalWeight << endl;
+
+        delete[] parent;
+        delete[] key;
     }
+
 
 private:
     int** adjMatrix;
